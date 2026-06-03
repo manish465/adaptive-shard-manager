@@ -1,5 +1,6 @@
 package com.manish.asm.router.service;
 
+import com.manish.asm.router.dto.ShardResponse;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.repository.ShardRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.UUID;
 public class ShardService {
     private final ShardRepository shardRepository;
 
-    public Shard createShard(String shardName, String databaseUrl) {
+    public ShardResponse createShard(String shardName, String databaseUrl) {
         Shard shard = new Shard(
                 UUID.randomUUID(),
                 shardName,
@@ -24,10 +25,24 @@ public class ShardService {
                 LocalDateTime.now()
         );
 
-        return shardRepository.save(shard);
+        Shard saved = shardRepository.save(shard);
+        return map(saved);
     }
 
-    public List<Shard> getAllShards() {
-        return shardRepository.findAll();
+    public List<ShardResponse> getAllShards() {
+        return shardRepository.findAll()
+                .stream()
+                .map(this::map)
+                .toList();
+    }
+
+    private ShardResponse map(Shard shard) {
+        return new ShardResponse(
+                shard.getId(),
+                shard.getShardName(),
+                shard.getStatus(),
+                shard.getDatabaseUrl(),
+                shard.getCreatedAt()
+        );
     }
 }
