@@ -1,0 +1,18 @@
+name: 'asm'
+
+services:
+  postgres:
+    container_name: 'asm-storage'
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: myusername
+      POSTGRES_PASSWORD: mysecurepassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:

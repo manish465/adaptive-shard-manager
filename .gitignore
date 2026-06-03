@@ -1,0 +1,57 @@
+### Spring Boot Core ###
+*.jar
+*.war
+*.ear
+*.cprof
+*.gprof
+.java-version
+.factorypath
+
+### Build Tools ###
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+pom.xml.note
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+# Avoid ignoring Common Maven Wrapper files if you use them
+# !.mvn/wrapper/maven-wrapper.jar
+# !.mvn/wrapper/maven-wrapper.properties
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### IDEs ###
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+*.launch
+bin/
+
+# Visual Studio Code
+.vscode/
+
+### Logs and Temp Files ###
+*.log
+logs/
+temp/
+tmp/
+
+### OS specific files ###
+.DS_Store
+Thumbs.db

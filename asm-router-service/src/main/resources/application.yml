@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: asm-router-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myusername
+    password: mysecurepassword
+    driver-class-name: org.postgresql.Driver
