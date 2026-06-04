@@ -1,12 +1,10 @@
 package com.manish.asm.router.controller;
 
+import com.manish.asm.router.dto.RoutingSimulationResponse;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.service.RoutingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/router")
@@ -18,5 +16,10 @@ public class RoutingController {
     public String route(@RequestParam String key) {
         Shard shard = routingService.route(key);
         return shard.getShardName();
+    }
+
+    @PostMapping("/simulate")
+    public RoutingSimulationResponse simulate(@RequestParam(defaultValue = "10000") int keys) {
+        return routingService.simulate(keys);
     }
 }

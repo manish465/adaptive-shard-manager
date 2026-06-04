@@ -6,9 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -22,10 +21,11 @@ public class ConsistentHashRing {
 
         for (Shard shard : shards) {
             for(int i = 0; i < ShardingProperties.VIRTUAL_NODES; i++) {
-                String vNodeName = shard.getShardName() + "#" + i;
-                long hash = hashFunction.hash(vNodeName);
-                log.info("ConsistentHashRing.buildRing with hash vNodeName {} for hash {} for shard {}", vNodeName, hash, shard);
+                String vnode = shard.getShardName() + "#" + i;
+                long hash = hashFunction.hash(vnode);
+                log.info("ConsistentHashRing.buildRing with hash vNodeName {} for hash {} for shard {}", vnode, hash, shard.getShardName());
                 ring.put(hash, shard);
+                log.info("Ring range min={} max={}", ring.firstKey(), ring.lastKey());
             }
         }
     }
@@ -34,9 +34,10 @@ public class ConsistentHashRing {
         if (ring.isEmpty()) throw new IllegalStateException("Ring is empty");
 
         long hash = hashFunction.hash(key);
+        log.info("key={} hash={} firstKey={} lastKey={}", key, hash, ring.firstKey(), ring.lastKey());
         log.info("ConsistentHashRing.locate with hash value {} for key {}", hash, key);
         SortedMap<Long, Shard> tailMap = ring.tailMap(hash);
-        log.info("ConsistentHashRing.locate rind {}", tailMap);
+        log.info("ConsistentHashRing.locate ring {}", tailMap);
 
         Long targetHash;
 
@@ -49,5 +50,16 @@ public class ConsistentHashRing {
 
     public int ringSize() {
         return ring.size();
+    }
+
+    public Map<Long, String> getNodes() {
+        return ring.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().getShardName(),
+                        (a, b) -> a,
+                        LinkedHashMap::new
+                ));
     }
 }
