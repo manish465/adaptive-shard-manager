@@ -20,11 +20,10 @@ public class ShardController {
     public ShardResponse createShard(
             @Valid @RequestBody CreateShardRequest createShardRequest
     ) {
-        return shardService
-                .createShard(
+        return shardService.createShard(
                         createShardRequest.getShardName(),
                         createShardRequest.getDatabaseUrl()
-                );
+        );
     }
 
     @GetMapping

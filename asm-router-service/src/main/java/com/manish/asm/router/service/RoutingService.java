@@ -27,9 +27,24 @@ public class RoutingService {
             distribution.merge(shard.getShardName(), 1L, Long::sum);
         }
 
+        long min = distribution.values()
+                        .stream()
+                        .min(Long::compareTo)
+                        .orElse(0L);
+
+        long max = distribution.values()
+                        .stream()
+                        .max(Long::compareTo)
+                        .orElse(0L);
+
+        double imbalance = ((double)(max - min) / max) * 100.0;
+
         return new RoutingSimulationResponse(
                 numberOfKeys,
                 distribution.size(),
+                min,
+                max,
+                imbalance,
                 distribution
         );
     }

@@ -1,6 +1,7 @@
 package com.manish.asm.router.hashing;
 
 import com.manish.asm.router.config.ShardingProperties;
+import com.manish.asm.router.dto.RingNodeResponse;
 import com.manish.asm.router.model.Shard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,14 +53,17 @@ public class ConsistentHashRing {
         return ring.size();
     }
 
-    public Map<Long, String> getNodes() {
-        return ring.entrySet()
+    public List<RingNodeResponse> getNodes() {
+        return ring
+                .entrySet()
                 .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        e -> e.getValue().getShardName(),
-                        (a, b) -> a,
-                        LinkedHashMap::new
-                ));
+                .collect(Collectors.groupingBy(
+                        entry -> entry.getValue().getShardName(),
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList())
+                ))
+                .entrySet()
+                .stream()
+                .map(node -> new RingNodeResponse(node.getValue(), node.getKey()))
+                .collect(Collectors.toList());
     }
 }
