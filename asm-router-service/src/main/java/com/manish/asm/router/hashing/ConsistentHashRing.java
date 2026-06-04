@@ -1,5 +1,6 @@
 package com.manish.asm.router.hashing;
 
+import com.manish.asm.router.config.ShardingProperties;
 import com.manish.asm.router.model.Shard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,12 @@ public class ConsistentHashRing {
         ring.clear();
 
         for (Shard shard : shards) {
-            long hash = hashFunction.hash(shard.getShardName());
-            log.info("ConsistentHashRing.buildRing with hash value {} for shard {}", hash, shard);
-
-            ring.put(hash, shard);
+            for(int i = 0; i < ShardingProperties.VIRTUAL_NODES; i++) {
+                String vNodeName = shard.getShardName() + "#" + i;
+                long hash = hashFunction.hash(vNodeName);
+                log.info("ConsistentHashRing.buildRing with hash vNodeName {} for hash {} for shard {}", vNodeName, hash, shard);
+                ring.put(hash, shard);
+            }
         }
     }
 
@@ -42,5 +45,9 @@ public class ConsistentHashRing {
         log.info("ConsistentHashRing.locate targetHash {}", targetHash);
 
         return ring.get(targetHash);
+    }
+
+    public int ringSize() {
+        return ring.size();
     }
 }
