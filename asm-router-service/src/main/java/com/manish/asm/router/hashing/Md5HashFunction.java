@@ -14,7 +14,14 @@ public class Md5HashFunction implements HashFunction {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             byte[] digest = md.digest(value.getBytes(StandardCharsets.UTF_8));
-            return ByteBuffer.wrap(digest).getLong() & Long.MAX_VALUE;
+
+            long result = 0;
+            for (int i = 0; i < digest.length; i++) {
+                result ^= ((long) digest[i] & 0xff) << ((i % 8) * 8);
+            }
+
+            return result & Long.MAX_VALUE;
+            
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }

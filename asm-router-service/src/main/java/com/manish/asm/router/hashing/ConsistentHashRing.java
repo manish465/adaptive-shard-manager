@@ -63,7 +63,7 @@ public class ConsistentHashRing {
                 ))
                 .entrySet()
                 .stream()
-                .map(node -> new RingNodeResponse(node.getValue(), node.getKey()))
+                .map(node -> new RingNodeResponse(node.getKey(), node.getValue()))
                 .collect(Collectors.toList());
     }
 }
