@@ -2,7 +2,6 @@ package com.manish.asm.router.hashing;
 
 import org.springframework.stereotype.Component;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
