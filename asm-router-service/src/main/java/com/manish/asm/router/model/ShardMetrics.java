@@ -1,6 +1,7 @@
 package com.manish.asm.router.model;
 
 public record ShardMetrics(
+        String shardName,
         double cpuUsage,
         double memoryUsage,
         double storageUsage,

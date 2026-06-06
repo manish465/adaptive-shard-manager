@@ -2,7 +2,7 @@ package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.metrics.ShardMetricsResponse;
 import com.manish.asm.router.health.ShardHealthEvaluator;
-import com.manish.asm.router.metrics.MetricsSimulator;
+import com.manish.asm.router.metrics.MetricsRegistry;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardHealth;
 import com.manish.asm.router.model.ShardMetrics;
@@ -19,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MetricsController {
     private final ShardRepository shardRepository;
-    private final MetricsSimulator simulator;
     private final ShardHealthEvaluator evaluator;
+    private final MetricsRegistry registry;
 
     @GetMapping("/shards")
     public List<ShardMetricsResponse> getMetrics() {
@@ -33,7 +33,7 @@ public class MetricsController {
     private ShardMetricsResponse map(
             Shard shard
     ){
-        ShardMetrics metrics = simulator.generate();
+        ShardMetrics metrics = registry.get(shard.getShardName());
         ShardHealth health = evaluator.evaluate(metrics);
 
         return new ShardMetricsResponse(

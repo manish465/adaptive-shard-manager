@@ -5,6 +5,7 @@ public record HotShardResponse(
         double cpuUsage,
         double memoryUsage,
         double storageUsage,
+        long requestsPerMinute,
         String recommendation
 ) {
 }

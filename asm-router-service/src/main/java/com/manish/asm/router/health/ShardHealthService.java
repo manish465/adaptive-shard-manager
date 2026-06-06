@@ -1,6 +1,7 @@
 package com.manish.asm.router.health;
 
 import com.manish.asm.router.dto.health.HotShardResponse;
+import com.manish.asm.router.metrics.MetricsRegistry;
 import com.manish.asm.router.metrics.MetricsSimulator;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardHealth;
@@ -16,8 +17,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ShardHealthService {
     private final ShardRepository shardRepository;
-    private final MetricsSimulator simulator;
     private final ShardHealthEvaluator evaluator;
+    private final MetricsRegistry registry;
 
     public List<HotShardResponse> findHotShards() {
         return shardRepository.findAll()
@@ -28,7 +29,7 @@ public class ShardHealthService {
     }
 
     private HotShardResponse evaluate(Shard shard) {
-        ShardMetrics metrics = simulator.generate();
+        ShardMetrics metrics = registry.get(shard.getShardName());
         ShardHealth health = evaluator.evaluate(metrics);
 
         if(health != ShardHealth.HOT) return null;
@@ -38,6 +39,7 @@ public class ShardHealthService {
                 metrics.cpuUsage(),
                 metrics.memoryUsage(),
                 metrics.storageUsage(),
+                metrics.requestsPerMinute(),
                 "SPLIT_RECOMMENDED"
         );
     }
