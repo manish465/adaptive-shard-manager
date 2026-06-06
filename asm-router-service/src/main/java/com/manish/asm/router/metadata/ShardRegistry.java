@@ -1,6 +1,8 @@
 package com.manish.asm.router.metadata;
 
+import com.manish.asm.router.dto.RingSummaryResponse;
 import com.manish.asm.router.hashing.ConsistentHashRing;
+import com.manish.asm.router.hashing.RingFactory;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.repository.ShardRepository;
 import jakarta.annotation.PostConstruct;
@@ -8,17 +10,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class ShardRegistry {
     private final ShardRepository shardRepository;
     private final ConsistentHashRing ring;
+
+    public ShardRegistry(
+            ShardRepository shardRepository,
+            RingFactory ringFactory
+    ) {
+        this.shardRepository = shardRepository;
+        ring = ringFactory.createRing();
+    }
 
     @PostConstruct
     public void initialize() {
@@ -41,5 +48,14 @@ public class ShardRegistry {
 
     public int ringSize() {
         return ring.ringSize();
+    }
+
+    public RingSummaryResponse getSummary() {
+        return new RingSummaryResponse(
+                shardRepository.count() > Integer.MAX_VALUE
+                        ? Integer.MAX_VALUE
+                        : (int) shardRepository.count(),
+                ringSize()
+        );
     }
 }

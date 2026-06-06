@@ -2,7 +2,6 @@ package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.CreateShardRequest;
 import com.manish.asm.router.dto.ShardResponse;
-import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.service.ShardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

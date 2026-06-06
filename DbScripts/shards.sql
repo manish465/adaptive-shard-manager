@@ -5,3 +5,6 @@ CREATE TABLE shards (
     database_url VARCHAR(500) NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
+
+ALTER TABLE shards
+ALTER COLUMN status TYPE VARCHAR(50);

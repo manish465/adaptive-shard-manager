@@ -9,3 +9,7 @@ spring:
     username: myusername
     password: mysecurepassword
     driver-class-name: org.postgresql.Driver
+
+asm:
+  hashing:
+    virtual-nodes: 100

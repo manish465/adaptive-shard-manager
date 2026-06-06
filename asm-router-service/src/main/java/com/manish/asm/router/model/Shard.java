@@ -1,9 +1,6 @@
 package com.manish.asm.router.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +20,9 @@ public class Shard {
     private UUID id;
     @Column(nullable = false)
     private String shardName;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private ShardStatus status;
     @Column(nullable = false)
     private String databaseUrl;
     @Column(nullable = false)

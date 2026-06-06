@@ -5,26 +5,28 @@ import com.manish.asm.router.dto.RingNodeResponse;
 import com.manish.asm.router.model.Shard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ConsistentHashRing {
     private final HashFunction hashFunction;
-    private final SortedMap<Long, Shard> ring = new TreeMap<>();
+    private final ShardingProperties shardingProperties;
+    private final NavigableMap<Long, Shard> ring = new TreeMap<>();
 
     public void buildRing(Collection<Shard> shards) {
         ring.clear();
 
         for (Shard shard : shards) {
-            for(int i = 0; i < ShardingProperties.VIRTUAL_NODES; i++) {
+            for(int i = 0; i < shardingProperties.getVirtualNodes(); i++) {
                 String vnode = shard.getShardName() + "#" + i;
                 long hash = hashFunction.hash(vnode);
                 log.info("ConsistentHashRing.buildRing with hash vNodeName {} for hash {} for shard {}", vnode, hash, shard.getShardName());
+                if (ring.containsKey(hash)) {
+                    log.warn("Hash collision detected hash={} vnode={}", hash, vnode);
+                }
                 ring.put(hash, shard);
                 log.info("Ring range min={} max={}", ring.firstKey(), ring.lastKey());
             }

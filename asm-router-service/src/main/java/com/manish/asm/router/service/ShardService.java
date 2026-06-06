@@ -1,8 +1,10 @@
 package com.manish.asm.router.service;
 
+import com.manish.asm.router.dto.RingSummaryResponse;
 import com.manish.asm.router.dto.ShardResponse;
 import com.manish.asm.router.metadata.ShardRegistry;
 import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +23,7 @@ public class ShardService {
         Shard shard = new Shard(
                 UUID.randomUUID(),
                 shardName,
-                "ACTIVE",
+                ShardStatus.ACTIVE,
                 databaseUrl,
                 LocalDateTime.now()
         );
