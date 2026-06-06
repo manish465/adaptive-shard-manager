@@ -1,7 +1,7 @@
 package com.manish.asm.router.controller;
 
-import com.manish.asm.router.dto.RingNodeResponse;
-import com.manish.asm.router.dto.RingSummaryResponse;
+import com.manish.asm.router.dto.metadata.RingNodeResponse;
+import com.manish.asm.router.dto.metadata.RingSummaryResponse;
 import com.manish.asm.router.hashing.ConsistentHashRing;
 import com.manish.asm.router.hashing.RingFactory;
 import com.manish.asm.router.metadata.ShardRegistry;

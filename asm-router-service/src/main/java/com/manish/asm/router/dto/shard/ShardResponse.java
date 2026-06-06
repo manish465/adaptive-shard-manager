@@ -1,4 +1,4 @@
-package com.manish.asm.router.dto;
+package com.manish.asm.router.dto.shard;
 
 import com.manish.asm.router.model.ShardStatus;
 

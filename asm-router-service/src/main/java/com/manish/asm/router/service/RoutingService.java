@@ -1,6 +1,6 @@
 package com.manish.asm.router.service;
 
-import com.manish.asm.router.dto.RoutingSimulationResponse;
+import com.manish.asm.router.dto.routing.RoutingSimulationResponse;
 import com.manish.asm.router.metadata.ShardRegistry;
 import com.manish.asm.router.model.Shard;
 import lombok.RequiredArgsConstructor;

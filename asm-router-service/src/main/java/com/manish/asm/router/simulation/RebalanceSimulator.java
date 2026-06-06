@@ -1,6 +1,6 @@
 package com.manish.asm.router.simulation;
 
-import com.manish.asm.router.dto.RebalanceSimulationResponse;
+import com.manish.asm.router.dto.simulation.RebalanceSimulationResponse;
 import com.manish.asm.router.hashing.ConsistentHashRing;
 import com.manish.asm.router.hashing.RingFactory;
 import com.manish.asm.router.model.Shard;

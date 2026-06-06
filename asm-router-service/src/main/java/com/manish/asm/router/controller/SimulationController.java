@@ -1,6 +1,6 @@
 package com.manish.asm.router.controller;
 
-import com.manish.asm.router.dto.RebalanceSimulationResponse;
+import com.manish.asm.router.dto.simulation.RebalanceSimulationResponse;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;

@@ -1,4 +1,4 @@
-package com.manish.asm.router.dto;
+package com.manish.asm.router.dto.shard;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

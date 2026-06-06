@@ -1,4 +1,4 @@
-package com.manish.asm.router.dto;
+package com.manish.asm.router.dto.routing;
 
 import java.util.Map;
 

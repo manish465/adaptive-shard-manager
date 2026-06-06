@@ -11,8 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "shards")
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor // Kept for JPA
 @Getter
 @Setter
 public class Shard {
@@ -27,4 +26,12 @@ public class Shard {
     private String databaseUrl;
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    public Shard(UUID id, String shardName, ShardStatus status, String databaseUrl, LocalDateTime createdAt) {
+        this.id = id;
+        this.shardName = shardName;
+        this.status = status;
+        this.databaseUrl = databaseUrl;
+        this.createdAt = createdAt;
+    }
 }

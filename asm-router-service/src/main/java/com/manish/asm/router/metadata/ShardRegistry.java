@@ -1,12 +1,11 @@
 package com.manish.asm.router.metadata;
 
-import com.manish.asm.router.dto.RingSummaryResponse;
+import com.manish.asm.router.dto.metadata.RingSummaryResponse;
 import com.manish.asm.router.hashing.ConsistentHashRing;
 import com.manish.asm.router.hashing.RingFactory;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.repository.ShardRepository;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

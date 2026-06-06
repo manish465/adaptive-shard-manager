@@ -1,4 +1,4 @@
-package com.manish.asm.router.dto;
+package com.manish.asm.router.dto.simulation;
 
 public record RebalanceSimulationResponse(
         int totalKeys,
