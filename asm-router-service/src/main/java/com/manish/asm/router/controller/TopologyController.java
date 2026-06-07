@@ -23,8 +23,8 @@ public class TopologyController {
         return repository.findAll()
                 .stream()
                 .map(shard -> new ShardTopologyResponse(
-                                shard.getShardName(),
-                                shard.getStatus()
+                    shard.getShardName(),
+                    shard.getStatus()
                 ))
                 .toList();
     }
@@ -32,12 +32,12 @@ public class TopologyController {
     @GetMapping("/assignments")
     public List<ShardAssignmentResponse> assignments() {
         return assignmentRegistry
-                .getAssignments()
+                .findAll()
                 .stream()
                 .map(assignment -> new ShardAssignmentResponse(
-                                assignment.shardName(),
-                                assignment.startToken(),
-                                assignment.endToken()
+                    assignment.shardName(),
+                    assignment.startToken(),
+                    assignment.endToken()
                 ))
                 .toList();
     }

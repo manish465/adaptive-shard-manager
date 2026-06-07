@@ -1,5 +1,6 @@
 package com.manish.asm.router.service;
 
+import com.manish.asm.router.metadata.AssignmentService;
 import com.manish.asm.router.metadata.ShardRegistry;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardStatus;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class TopologyService {
     private final ShardRepository shardRepository;
     private final ShardRegistry shardRegistry;
+    private final AssignmentService assignmentService;
 
     public void splitShard(String shardName) {
         Shard original = shardRepository
@@ -25,6 +27,7 @@ public class TopologyService {
         createChildShard(shardName + "-1", original.getDatabaseUrl());
         createChildShard(shardName + "-2", original.getDatabaseUrl());
         shardRegistry.refresh();
+        assignmentService.refreshAssignments();
     }
 
     private void createChildShard(String shardName, String databaseUrl) {

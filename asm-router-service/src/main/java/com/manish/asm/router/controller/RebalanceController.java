@@ -2,7 +2,6 @@ package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.rebalancer.RebalancePlanResponse;
 import com.manish.asm.router.dto.rebalancer.RebalancePlanView;
-import com.manish.asm.router.model.RebalancePlan;
 import com.manish.asm.router.rebalancer.RebalanceExecutor;
 import com.manish.asm.router.rebalancer.RebalancePlanRegistry;
 import com.manish.asm.router.rebalancer.RebalancePlanner;
