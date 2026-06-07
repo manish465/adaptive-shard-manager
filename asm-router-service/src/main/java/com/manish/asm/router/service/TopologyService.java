@@ -1,10 +1,10 @@
 package com.manish.asm.router.service;
 
-import com.manish.asm.router.metadata.AssignmentService;
 import com.manish.asm.router.metadata.ShardRegistry;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
+import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +16,19 @@ import java.util.UUID;
 public class TopologyService {
     private final ShardRepository shardRepository;
     private final ShardRegistry shardRegistry;
-    private final AssignmentService assignmentService;
 
-    public void splitShard(String shardName) {
-        Shard original = shardRepository
-                .findByShardName(shardName)
-                .orElseThrow();
+    public TopologyChange splitShard(String shardName) {
+        Shard original = shardRepository.findByShardName(shardName).orElseThrow();
+        String childShard1 = shardName + "-1";
+        String childShard2 = shardName + "-2";
+
         original.setStatus(ShardStatus.SPLITTING);
         shardRepository.save(original);
-        createChildShard(shardName + "-1", original.getDatabaseUrl());
-        createChildShard(shardName + "-2", original.getDatabaseUrl());
+        createChildShard(childShard1, original.getDatabaseUrl());
+        createChildShard(childShard2, original.getDatabaseUrl());
         shardRegistry.refresh();
-        assignmentService.refreshAssignments();
+
+        return new TopologyChange(shardName, childShard1, childShard2);
     }
 
     private void createChildShard(String shardName, String databaseUrl) {

@@ -19,9 +19,14 @@ public class RebalanceController {
     private final RebalancePlanRegistry registry;
     private final RebalanceExecutor executor;
 
+    @PostMapping("/generate")
+    public void generatePlans() {
+        planner.generatePlans();
+    }
+
     @GetMapping("/plan")
     public List<RebalancePlanResponse> plan() {
-        return planner.generatePlan();
+        return planner.generatePlans();
     }
 
     @PostMapping("/test")

@@ -1,13 +1,18 @@
 package com.manish.asm.router.metadata;
 
+import com.manish.asm.router.model.ShardAssignment;
+import com.manish.asm.router.topology.TopologyChange;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AssignmentService {
     private final ShardAssignmentRegistry registry;
+    private final AssignmentSplitPlanner splitPlanner;
 
     @PostConstruct
     public void initialize() {
@@ -16,5 +21,13 @@ public class AssignmentService {
 
     public void refreshAssignments() {
         registry.findAll().forEach(existing -> registry.delete(existing.id()));
+    }
+
+    public List<ShardAssignment> applySplit(TopologyChange change) {
+        ShardAssignment original = registry.findSingleByShard(change.sourceShard());
+        List<ShardAssignment> children = splitPlanner.split(original, change);
+        registry.delete(original.id());
+        children.forEach(registry::save);
+        return children;
     }
 }

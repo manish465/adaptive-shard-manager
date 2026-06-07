@@ -19,7 +19,7 @@ public class RebalancePlanner {
     private final PriorityCalculator priorityCalculator;
     private final RebalancePlanRegistry registry;
 
-    public List<RebalancePlanResponse> generatePlan() {
+    public List<RebalancePlanResponse> generatePlans() {
 
         return healthService.findHotShards()
                 .stream()
@@ -32,7 +32,7 @@ public class RebalancePlanner {
     public void createTestPlan() {
         registry.clear();
 
-        generatePlan()
+        generatePlans()
                 .stream()
                 .map(this::toPlan)
                 .forEach(registry::save);
