@@ -3,20 +3,21 @@ package com.manish.asm.router.rebalancer;
 import com.manish.asm.router.dto.health.HotShardResponse;
 import com.manish.asm.router.dto.rebalancer.RebalancePlanResponse;
 import com.manish.asm.router.health.ShardHealthService;
-import com.manish.asm.router.model.RebalanceAction;
-import com.manish.asm.router.model.RebalanceReason;
-import com.manish.asm.router.model.ShardMetrics;
+import com.manish.asm.router.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class RebalancePlanner {
     private final ShardHealthService healthService;
     private final PriorityCalculator priorityCalculator;
+    private final RebalancePlanRegistry registry;
 
     public List<RebalancePlanResponse> generatePlan() {
 
@@ -26,6 +27,20 @@ public class RebalancePlanner {
                 .map(this::plan)
                 .sorted(Comparator.comparingInt(RebalancePlanResponse::priority).reversed())
                 .toList();
+    }
+
+    public void createTestPlan() {
+        RebalancePlan plan = new RebalancePlan(
+                UUID.randomUUID(),
+                "shard-a",
+                RebalanceReason.CPU_PRESSURE,
+                RebalanceAction.SPLIT_SHARD,
+                95,
+                PlanStatus.CREATED,
+                LocalDateTime.now()
+        );
+
+        registry.save(plan);
     }
 
     private RebalancePlanResponse plan(ShardMetrics shard) {

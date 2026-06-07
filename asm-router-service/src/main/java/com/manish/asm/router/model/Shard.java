@@ -1,6 +1,7 @@
 package com.manish.asm.router.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "shards")
-@NoArgsConstructor // Kept for JPA
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class Shard {
