@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class MigrationPlanner {
@@ -18,6 +19,7 @@ public class MigrationPlanner {
 
         plans.add(
                 new MigrationPlan(
+                        UUID.randomUUID(),
                         sourceAssignment.shardName(),
                         childShard1,
                         sourceAssignment.startToken(),
@@ -27,6 +29,7 @@ public class MigrationPlanner {
 
         plans.add(
                 new MigrationPlan(
+                        UUID.randomUUID(),
                         sourceAssignment.shardName(),
                         childShard2,
                         midpoint + 1,

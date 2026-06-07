@@ -15,6 +15,7 @@ public class MigrationTaskGenerator {
     private MigrationTask toTask(MigrationPlan plan) {
         return new MigrationTask(
                 UUID.randomUUID(),
+                plan.id(),
                 plan.sourceShard(),
                 plan.targetShard(),
                 plan.startToken(),

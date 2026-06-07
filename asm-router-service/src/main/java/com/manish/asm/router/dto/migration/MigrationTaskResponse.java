@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public record MigrationTaskResponse(
         UUID id,
+        UUID planId,
         String sourceShard,
         String targetShard,
         long startToken,
