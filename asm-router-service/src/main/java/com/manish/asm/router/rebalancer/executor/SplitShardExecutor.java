@@ -7,7 +7,7 @@ import com.manish.asm.router.migration.MigrationPlannerResult;
 import com.manish.asm.router.migration.MigrationService;
 import com.manish.asm.router.model.RebalanceAction;
 import com.manish.asm.router.model.RebalancePlan;
-import com.manish.asm.router.service.TopologyService;
+import com.manish.asm.router.topology.TopologyService;
 import com.manish.asm.router.topology.SplitOperationRegistry;
 import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;

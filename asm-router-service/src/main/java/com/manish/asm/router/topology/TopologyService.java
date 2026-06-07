@@ -1,10 +1,9 @@
-package com.manish.asm.router.service;
+package com.manish.asm.router.topology;
 
 import com.manish.asm.router.metadata.ShardRegistry;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
-import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

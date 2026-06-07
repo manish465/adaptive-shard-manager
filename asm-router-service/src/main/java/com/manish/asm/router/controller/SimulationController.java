@@ -8,7 +8,7 @@ import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
-import com.manish.asm.router.service.TopologyService;
+import com.manish.asm.router.topology.TopologyService;
 import com.manish.asm.router.simulation.RebalanceSimulator;
 import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;
