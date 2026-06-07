@@ -15,6 +15,10 @@ public class MigrationService {
         generator.generate(plans).forEach(registry::save);
     }
 
+    public void createTasks(MigrationPlannerResult result) {
+        createTasks(result.plans());
+    }
+
     public List<MigrationTask> tasks() {
         return registry.findAll();
     }

@@ -2,6 +2,7 @@ package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.migration.MigrationPlanResponse;
 import com.manish.asm.router.dto.simulation.RebalanceSimulationResponse;
+import com.manish.asm.router.metadata.AssignmentChangeSet;
 import com.manish.asm.router.migration.MigrationPlanner;
 import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardAssignment;
@@ -45,10 +46,12 @@ public class SimulationController {
 
     @GetMapping("/migration/split")
     public List<MigrationPlanResponse> simulateSplit() {
-        ShardAssignment assignment = new ShardAssignment(UUID.randomUUID(),"shard-a", 0, 333332);
+        ShardAssignment original = new ShardAssignment(UUID.randomUUID(),"shard-a", 0, 333332);
+        ShardAssignment childShard1 = new ShardAssignment(UUID.randomUUID(),"shard-a-1", 0, 166666);
+        ShardAssignment childShard2 = new ShardAssignment(UUID.randomUUID(),"shard-a-2", 166667, 333332);
+        AssignmentChangeSet changeSet = new AssignmentChangeSet(original, List.of(childShard1, childShard2));
 
-        return migrationPlanner
-                .planSplit(assignment, "shard-a-1", "shard-a-2")
+        return migrationPlanner.planSplit(changeSet).plans()
                 .stream()
                 .map(plan -> new MigrationPlanResponse(
                     plan.sourceShard(),

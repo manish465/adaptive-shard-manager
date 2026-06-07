@@ -23,11 +23,11 @@ public class AssignmentService {
         registry.findAll().forEach(existing -> registry.delete(existing.id()));
     }
 
-    public List<ShardAssignment> applySplit(TopologyChange change) {
+    public AssignmentChangeSet applySplit(TopologyChange change) {
         ShardAssignment original = registry.findSingleByShard(change.sourceShard());
         List<ShardAssignment> children = splitPlanner.split(original, change);
         registry.delete(original.id());
         children.forEach(registry::save);
-        return children;
+        return new AssignmentChangeSet(original, children);
     }
 }
