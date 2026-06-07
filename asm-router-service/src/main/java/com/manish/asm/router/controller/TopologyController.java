@@ -1,6 +1,8 @@
 package com.manish.asm.router.controller;
 
+import com.manish.asm.router.dto.shard.ShardAssignmentResponse;
 import com.manish.asm.router.dto.shard.ShardTopologyResponse;
+import com.manish.asm.router.metadata.ShardAssignmentRegistry;
 import com.manish.asm.router.repository.ShardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TopologyController {
     private final ShardRepository repository;
+    private final ShardAssignmentRegistry assignmentRegistry;
 
     @GetMapping("/shards")
     public List<ShardTopologyResponse> shards(){
@@ -22,6 +25,19 @@ public class TopologyController {
                 .map(shard -> new ShardTopologyResponse(
                                 shard.getShardName(),
                                 shard.getStatus()
+                ))
+                .toList();
+    }
+
+    @GetMapping("/assignments")
+    public List<ShardAssignmentResponse> assignments() {
+        return assignmentRegistry
+                .getAssignments()
+                .stream()
+                .map(assignment -> new ShardAssignmentResponse(
+                                assignment.shardName(),
+                                assignment.startToken(),
+                                assignment.endToken()
                 ))
                 .toList();
     }

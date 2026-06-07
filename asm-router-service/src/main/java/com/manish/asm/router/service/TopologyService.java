@@ -20,16 +20,8 @@ public class TopologyService {
         Shard original = shardRepository
                 .findByShardName(shardName)
                 .orElseThrow();
-
-        Shard splittingShard = new Shard(
-                original.getId(),
-                original.getShardName(),
-                ShardStatus.SPLITTING,
-                original.getDatabaseUrl(),
-                original.getCreatedAt()
-        );
-
-        shardRepository.save(splittingShard);
+        original.setStatus(ShardStatus.SPLITTING);
+        shardRepository.save(original);
         createChildShard(shardName + "-1", original.getDatabaseUrl());
         createChildShard(shardName + "-2", original.getDatabaseUrl());
         shardRegistry.refresh();
