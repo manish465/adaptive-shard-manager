@@ -1,16 +1,16 @@
 package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.rebalancer.RebalancePlanResponse;
+import com.manish.asm.router.dto.rebalancer.RebalancePlanView;
 import com.manish.asm.router.model.RebalancePlan;
+import com.manish.asm.router.rebalancer.RebalanceExecutor;
 import com.manish.asm.router.rebalancer.RebalancePlanRegistry;
 import com.manish.asm.router.rebalancer.RebalancePlanner;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/rebalance")
@@ -18,6 +18,7 @@ import java.util.List;
 public class RebalanceController {
     private final RebalancePlanner planner;
     private final RebalancePlanRegistry registry;
+    private final RebalanceExecutor executor;
 
     @GetMapping("/plan")
     public List<RebalancePlanResponse> plan() {
@@ -31,7 +32,24 @@ public class RebalanceController {
     }
 
     @GetMapping("/plans")
-    public List<RebalancePlan> plans() {
-        return registry.getAll();
+    public List<RebalancePlanView> plans() {
+        return registry.getAll()
+                .stream()
+                .map(plan ->
+                        new RebalancePlanView(
+                                plan.id(),
+                                plan.shardName(),
+                                plan.reason(),
+                                plan.action(),
+                                plan.priority(),
+                                plan.status(),
+                                plan.createdAt()
+                        ))
+                .toList();
+    }
+
+    @PostMapping("/{planId}/execute")
+    public void execute(@PathVariable UUID planId) {
+        executor.execute(planId);
     }
 }

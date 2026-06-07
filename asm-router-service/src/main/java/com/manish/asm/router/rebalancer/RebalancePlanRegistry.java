@@ -16,10 +16,24 @@ public class RebalancePlanRegistry {
     }
 
     public List<RebalancePlan> getAll() {
-        return plans.values().stream().toList();
+        return plans
+                .values()
+                .stream()
+                .sorted((a, b) -> Integer.
+                        compare(b.priority(),a.priority())
+                )
+                .toList();
     }
 
     public void clear() {
         plans.clear();
+    }
+
+    public RebalancePlan findById(UUID planId) {
+        return plans.get(planId);
+    }
+
+    public void saveOrUpdate(RebalancePlan plan) {
+        plans.put(plan.id(), plan);
     }
 }

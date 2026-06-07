@@ -30,17 +30,24 @@ public class RebalancePlanner {
     }
 
     public void createTestPlan() {
-        RebalancePlan plan = new RebalancePlan(
+        registry.clear();
+
+        generatePlan()
+                .stream()
+                .map(this::toPlan)
+                .forEach(registry::save);
+    }
+
+    private RebalancePlan toPlan(RebalancePlanResponse response) {
+        return new RebalancePlan(
                 UUID.randomUUID(),
-                "shard-a",
-                RebalanceReason.CPU_PRESSURE,
-                RebalanceAction.SPLIT_SHARD,
-                95,
-                PlanStatus.CREATED,
+                response.shardName(),
+                response.reason(),
+                response.action(),
+                response.priority(),
+                PlanStatus.GENERATED,
                 LocalDateTime.now()
         );
-
-        registry.save(plan);
     }
 
     private RebalancePlanResponse plan(ShardMetrics shard) {
