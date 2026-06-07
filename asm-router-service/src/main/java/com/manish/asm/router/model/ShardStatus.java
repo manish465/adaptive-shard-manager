@@ -4,5 +4,6 @@ public enum ShardStatus {
     ACTIVE,
     SPLITTING,
     MIGRATING,
+    MERGING,
     INACTIVE
 }
