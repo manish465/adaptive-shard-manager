@@ -28,7 +28,7 @@ public class TopologyService {
         createChildShard(childShard2, original.getDatabaseUrl());
         shardRegistry.refresh();
 
-        return new TopologyChange(shardName, childShard1, childShard2);
+        return new TopologyChange(UUID.randomUUID(), shardName, childShard1, childShard2);
     }
 
     private void createChildShard(String shardName, String databaseUrl) {

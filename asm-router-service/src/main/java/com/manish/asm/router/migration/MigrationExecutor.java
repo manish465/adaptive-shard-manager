@@ -1,5 +1,6 @@
 package com.manish.asm.router.migration;
 
+import com.manish.asm.router.topology.SplitLifecycleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -7,10 +8,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MigrationExecutor {
     private final MigrationTaskRegistry registry;
+    private final SplitLifecycleService lifecycleService;
 
     public void executeTask(MigrationTask task) {
         MigrationTask running = new MigrationTask(
             task.id(),
+            task.operationId(),
             task.planId(),
             task.sourceShard(),
             task.targetShard(),
@@ -27,6 +30,7 @@ public class MigrationExecutor {
 
             MigrationTask completed = new MigrationTask(
                 task.id(),
+                task.operationId(),
                 task.planId(),
                 task.sourceShard(),
                 task.targetShard(),
@@ -37,11 +41,13 @@ public class MigrationExecutor {
             );
 
             registry.update(completed);
+            lifecycleService.finalizeIfReady(completed.operationId());
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
 
             MigrationTask failed = new MigrationTask(
                 task.id(),
+                task.operationId(),
                 task.planId(),
                 task.sourceShard(),
                 task.targetShard(),

@@ -25,4 +25,11 @@ public class MigrationTaskRegistry {
     public void update(MigrationTask task) {
         tasks.put(task.id(), task);
     }
+
+    public List<MigrationTask> findByOperation(UUID operationId) {
+        return tasks.values()
+                .stream()
+                .filter(task -> task.operationId().equals(operationId))
+                .toList();
+    }
 }

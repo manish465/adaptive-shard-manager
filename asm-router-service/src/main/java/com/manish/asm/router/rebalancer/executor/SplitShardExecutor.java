@@ -7,14 +7,12 @@ import com.manish.asm.router.migration.MigrationPlannerResult;
 import com.manish.asm.router.migration.MigrationService;
 import com.manish.asm.router.model.RebalanceAction;
 import com.manish.asm.router.model.RebalancePlan;
-import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.service.TopologyService;
+import com.manish.asm.router.topology.SplitOperationRegistry;
 import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Slf4j
@@ -24,6 +22,7 @@ public class SplitShardExecutor implements PlanExecutor {
     private final AssignmentService assignmentService;
     private final MigrationPlanner migrationPlanner;
     private final MigrationService migrationService;
+    private final SplitOperationRegistry operationRegistry;
 
     @Override
     public boolean supports(RebalancePlan plan) {
@@ -33,11 +32,16 @@ public class SplitShardExecutor implements PlanExecutor {
     @Override
     public TopologyChange execute(RebalancePlan plan) {
         log.info("Splitting shard: {}", plan.shardName());
+
         TopologyChange change = topologyService.splitShard(plan.shardName());
+        operationRegistry.save(change);
+
         AssignmentChangeSet assignmentChange = assignmentService.applySplit(change);
-        MigrationPlannerResult result = migrationPlanner.planSplit(assignmentChange);
+        MigrationPlannerResult result = migrationPlanner.planSplit(assignmentChange, change);
+
         log.info("Created child shards {} and {}", assignmentChange.replacements().get(0).shardName(), assignmentChange.replacements().get(1).shardName());
         migrationService.createTasks(result);
-        return new TopologyChange(plan.shardName(), plan.shardName() + "-1", plan.shardName() + "-2");
+
+        return change;
     }
 }

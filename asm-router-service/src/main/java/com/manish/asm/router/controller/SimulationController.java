@@ -8,7 +8,9 @@ import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
+import com.manish.asm.router.service.TopologyService;
 import com.manish.asm.router.simulation.RebalanceSimulator;
+import com.manish.asm.router.topology.TopologyChange;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/simulation")
 @RequiredArgsConstructor
 public class SimulationController {
+    private final TopologyService topologyService;
     private final ShardRepository shardRepository;
     private final RebalanceSimulator simulator;
     private final MigrationPlanner migrationPlanner;
@@ -37,11 +40,7 @@ public class SimulationController {
                 LocalDateTime.now()
         );
 
-        return simulator.simulateAddShard(
-                shards,
-                newShard,
-                keys
-        );
+        return simulator.simulateAddShard(shards, newShard, keys);
     }
 
     @GetMapping("/migration/split")
@@ -50,8 +49,9 @@ public class SimulationController {
         ShardAssignment childShard1 = new ShardAssignment(UUID.randomUUID(),"shard-a-1", 0, 166666);
         ShardAssignment childShard2 = new ShardAssignment(UUID.randomUUID(),"shard-a-2", 166667, 333332);
         AssignmentChangeSet changeSet = new AssignmentChangeSet(original, List.of(childShard1, childShard2));
+        TopologyChange change = topologyService.splitShard("shard-a");
 
-        return migrationPlanner.planSplit(changeSet).plans()
+        return migrationPlanner.planSplit(changeSet, change).plans()
                 .stream()
                 .map(plan -> new MigrationPlanResponse(
                     plan.sourceShard(),

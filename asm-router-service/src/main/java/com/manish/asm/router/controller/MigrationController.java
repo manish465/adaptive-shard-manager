@@ -1,9 +1,7 @@
 package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.migration.MigrationTaskResponse;
-import com.manish.asm.router.migration.MigrationExecutor;
-import com.manish.asm.router.migration.MigrationService;
-import com.manish.asm.router.migration.MigrationTask;
+import com.manish.asm.router.migration.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +14,7 @@ import java.util.UUID;
 public class MigrationController {
     private final MigrationService service;
     private final MigrationExecutor executor;
+    private final MigrationTaskRegistry taskRegistry;
 
     @GetMapping("/tasks")
     public List<MigrationTaskResponse> tasks() {
@@ -43,5 +42,13 @@ public class MigrationController {
                         .orElseThrow();
 
         executor.executeTask(task);
+    }
+
+    @PostMapping("/tasks/execute-all")
+    public void executeAll() {
+        taskRegistry.findAll()
+                .stream()
+                .filter(task -> task.status() == MigrationTaskStatus.PENDING)
+                .forEach(executor::executeTask);
     }
 }

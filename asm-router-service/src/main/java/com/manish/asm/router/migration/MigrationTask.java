@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record MigrationTask(
         UUID id,
+        UUID operationId,
         UUID planId,
         String sourceShard,
         String targetShard,

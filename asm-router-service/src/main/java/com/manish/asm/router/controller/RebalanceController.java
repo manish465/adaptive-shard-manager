@@ -2,6 +2,7 @@ package com.manish.asm.router.controller;
 
 import com.manish.asm.router.dto.rebalancer.RebalancePlanResponse;
 import com.manish.asm.router.dto.rebalancer.RebalancePlanView;
+import com.manish.asm.router.model.RebalancePlan;
 import com.manish.asm.router.rebalancer.RebalanceExecutor;
 import com.manish.asm.router.rebalancer.RebalancePlanRegistry;
 import com.manish.asm.router.rebalancer.RebalancePlanner;
@@ -20,8 +21,8 @@ public class RebalanceController {
     private final RebalanceExecutor executor;
 
     @PostMapping("/generate")
-    public void generatePlans() {
-        planner.generatePlans();
+    public List<RebalancePlanResponse> generate() {
+        return planner.generatePlans();
     }
 
     @GetMapping("/plan")
@@ -30,9 +31,8 @@ public class RebalanceController {
     }
 
     @PostMapping("/test")
-    public String createTestPlan() {
-        planner.createTestPlan();
-        return "plan created";
+    public List<RebalancePlan> createTestPlan() {
+        return planner.createTestPlan();
     }
 
     @GetMapping("/plans")

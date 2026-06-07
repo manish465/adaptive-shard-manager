@@ -12,6 +12,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import static org.hibernate.internal.util.collections.ArrayHelper.forEach;
+
 @Service
 @RequiredArgsConstructor
 public class RebalancePlanner {
@@ -20,7 +22,6 @@ public class RebalancePlanner {
     private final RebalancePlanRegistry registry;
 
     public List<RebalancePlanResponse> generatePlans() {
-
         return healthService.findHotShards()
                 .stream()
                 .map(this::toShardMetrics)
@@ -29,13 +30,12 @@ public class RebalancePlanner {
                 .toList();
     }
 
-    public void createTestPlan() {
+    public List<RebalancePlan> createTestPlan() {
         registry.clear();
+        List<RebalancePlan> rebalancePlans = generatePlans().stream().map(this::toPlan).toList();
+        rebalancePlans.forEach(registry::save);
 
-        generatePlans()
-                .stream()
-                .map(this::toPlan)
-                .forEach(registry::save);
+        return rebalancePlans;
     }
 
     private RebalancePlan toPlan(RebalancePlanResponse response) {
