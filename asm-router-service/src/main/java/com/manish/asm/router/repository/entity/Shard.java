@@ -1,5 +1,6 @@
-package com.manish.asm.router.model;
+package com.manish.asm.router.repository.entity;
 
+import com.manish.asm.router.model.ShardStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

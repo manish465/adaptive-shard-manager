@@ -1,6 +1,6 @@
-package com.manish.asm.router.repository;
+package com.manish.asm.router.repository.mapper;
 
-import com.manish.asm.router.model.SplitOperationEntity;
+import com.manish.asm.router.repository.entity.SplitOperationEntity;
 import com.manish.asm.router.topology.SplitOperation;
 import org.springframework.stereotype.Component;
 

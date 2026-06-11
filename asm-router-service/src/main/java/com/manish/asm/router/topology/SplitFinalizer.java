@@ -1,6 +1,6 @@
 package com.manish.asm.router.topology;
 
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
 import lombok.RequiredArgsConstructor;

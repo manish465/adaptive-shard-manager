@@ -1,6 +1,6 @@
 package com.manish.asm.router.metrics;
 
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardMetrics;
 import org.springframework.stereotype.Component;
 

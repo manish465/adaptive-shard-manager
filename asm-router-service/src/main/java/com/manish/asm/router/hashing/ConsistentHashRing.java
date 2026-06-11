@@ -2,7 +2,7 @@ package com.manish.asm.router.hashing;
 
 import com.manish.asm.router.config.ShardingProperties;
 import com.manish.asm.router.dto.metadata.RingNodeResponse;
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -2,7 +2,7 @@ package com.manish.asm.router.service;
 
 import com.manish.asm.router.dto.shard.ShardResponse;
 import com.manish.asm.router.metadata.ShardRegistry;
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
 import lombok.RequiredArgsConstructor;

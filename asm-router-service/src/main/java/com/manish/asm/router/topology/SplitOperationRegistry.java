@@ -1,7 +1,7 @@
 package com.manish.asm.router.topology;
 
-import com.manish.asm.router.model.SplitOperationEntity;
-import com.manish.asm.router.repository.SplitOperationMapper;
+import com.manish.asm.router.repository.entity.SplitOperationEntity;
+import com.manish.asm.router.repository.mapper.SplitOperationMapper;
 import com.manish.asm.router.repository.SplitOperationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

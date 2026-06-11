@@ -4,7 +4,7 @@ import com.manish.asm.router.dto.migration.MigrationPlanResponse;
 import com.manish.asm.router.dto.simulation.RebalanceSimulationResponse;
 import com.manish.asm.router.metadata.AssignmentChangeSet;
 import com.manish.asm.router.migration.MigrationPlanner;
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;

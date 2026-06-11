@@ -1,6 +1,6 @@
 package com.manish.asm.router.metadata;
 
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.repository.ShardRepository;
 import jakarta.annotation.PostConstruct;

@@ -3,7 +3,7 @@ package com.manish.asm.router.controller;
 import com.manish.asm.router.dto.metrics.ShardMetricsResponse;
 import com.manish.asm.router.health.ShardHealthEvaluator;
 import com.manish.asm.router.metrics.MetricsRegistry;
-import com.manish.asm.router.model.Shard;
+import com.manish.asm.router.repository.entity.Shard;
 import com.manish.asm.router.model.ShardHealth;
 import com.manish.asm.router.model.ShardMetrics;
 import com.manish.asm.router.repository.ShardRepository;

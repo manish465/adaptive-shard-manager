@@ -1,4 +1,4 @@
-package com.manish.asm.router.model;
+package com.manish.asm.router.repository.entity;
 
 import com.manish.asm.router.topology.OperationType;
 import com.manish.asm.router.topology.SplitOperationStatus;
