@@ -40,8 +40,8 @@ public class MigrationExecutor {
                 task.createdAt()
             );
 
-            registry.update(completed);
-            lifecycleService.finalizeIfReady(completed.operationId());
+            if(lifecycleService.finalizeIfReady(completed.operationId()))
+                registry.update(completed);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class SplitFinalizer {
     private final ShardRepository shardRepository;
 
-    public void finalizeSplit(TopologyChange change) {
+    public void finalizeSplit(SplitOperation change) {
         Shard source = shardRepository
                         .findByShardName(change.sourceShard())
                         .orElseThrow();

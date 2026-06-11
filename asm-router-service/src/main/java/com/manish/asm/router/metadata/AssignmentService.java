@@ -1,6 +1,7 @@
 package com.manish.asm.router.metadata;
 
 import com.manish.asm.router.model.ShardAssignment;
+import com.manish.asm.router.topology.SplitOperation;
 import com.manish.asm.router.topology.TopologyChange;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class AssignmentService {
         registry.findAll().forEach(existing -> registry.delete(existing.id()));
     }
 
-    public AssignmentChangeSet applySplit(TopologyChange change) {
+    public AssignmentChangeSet applySplit(SplitOperation change) {
         ShardAssignment original = registry.findSingleByShard(change.sourceShard());
         List<ShardAssignment> children = splitPlanner.split(original, change);
         registry.delete(original.id());

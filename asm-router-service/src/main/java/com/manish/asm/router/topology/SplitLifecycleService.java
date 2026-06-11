@@ -16,12 +16,12 @@ public class SplitLifecycleService {
     public boolean finalizeIfReady(UUID operationId) {
         if (!coordinator.isOperationComplete(operationId)) return false;
 
-        TopologyChange change = registry.find(operationId);
+        SplitOperation change = registry.find(operationId);
 
         if (change == null) return false;
 
         finalizer.finalizeSplit(change);
-        registry.remove(operationId);
+        registry.updateStatus(operationId, SplitOperationStatus.COMPLETED);
 
         return true;
     }

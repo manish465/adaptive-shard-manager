@@ -8,9 +8,9 @@ import com.manish.asm.router.model.Shard;
 import com.manish.asm.router.model.ShardAssignment;
 import com.manish.asm.router.model.ShardStatus;
 import com.manish.asm.router.repository.ShardRepository;
-import com.manish.asm.router.topology.TopologyService;
+import com.manish.asm.router.topology.SplitOperation;
 import com.manish.asm.router.simulation.RebalanceSimulator;
-import com.manish.asm.router.topology.TopologyChange;
+import com.manish.asm.router.topology.TopologyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ public class SimulationController {
         ShardAssignment childShard1 = new ShardAssignment(UUID.randomUUID(),"shard-a-1", 0, 166666);
         ShardAssignment childShard2 = new ShardAssignment(UUID.randomUUID(),"shard-a-2", 166667, 333332);
         AssignmentChangeSet changeSet = new AssignmentChangeSet(original, List.of(childShard1, childShard2));
-        TopologyChange change = topologyService.splitShard("shard-a");
+        SplitOperation change = topologyService.splitShard("shard-a");
 
         return migrationPlanner.planSplit(changeSet, change).plans()
                 .stream()
