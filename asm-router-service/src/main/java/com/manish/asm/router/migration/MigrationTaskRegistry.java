@@ -1,35 +1,53 @@
 package com.manish.asm.router.migration;
 
+import com.manish.asm.router.repository.MigrationTaskRepository;
+import com.manish.asm.router.repository.entity.MigrationTaskEntity;
+import com.manish.asm.router.repository.mapper.MigrationTaskMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@RequiredArgsConstructor
 public class MigrationTaskRegistry {
-    private final ConcurrentHashMap<UUID, MigrationTask> tasks = new ConcurrentHashMap<>();
+    private final MigrationTaskRepository repository;
+    private final MigrationTaskMapper mapper;
 
     public void save(MigrationTask task) {
-        tasks.put(task.id(), task);
+        MigrationTaskEntity entity = mapper.toEntity(task);
+        repository.save(entity);
     }
 
     public MigrationTask findById(UUID id) {
-        return tasks.get(id);
+
+        return repository.findById(id)
+                .map(mapper::toDomain)
+                .orElse(null);
     }
 
     public List<MigrationTask> findAll() {
-        return tasks.values().stream().toList();
+
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     public void update(MigrationTask task) {
-        tasks.put(task.id(), task);
+
+        MigrationTaskEntity entity =
+                mapper.toEntity(task);
+
+        repository.save(entity);
     }
 
     public List<MigrationTask> findByOperation(UUID operationId) {
-        return tasks.values()
+
+        return repository.findByOperationId(operationId)
                 .stream()
-                .filter(task -> task.operationId().equals(operationId))
+                .map(mapper::toDomain)
                 .toList();
     }
 }
