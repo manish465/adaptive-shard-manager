@@ -4,6 +4,7 @@ import com.manish.asm.router.migration.MigrationCoordinator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,11 +17,11 @@ public class SplitLifecycleService {
     public boolean finalizeIfReady(UUID operationId) {
         if (!coordinator.isOperationComplete(operationId)) return false;
 
-        SplitOperation change = registry.find(operationId);
+        Optional<SplitOperation> changeOptional = registry.findById(operationId);
 
-        if (change == null) return false;
+        if (changeOptional.isEmpty()) return false;
 
-        finalizer.finalizeSplit(change);
+        finalizer.finalizeSplit(changeOptional.get());
         registry.updateStatus(operationId, SplitOperationStatus.COMPLETED);
 
         return true;

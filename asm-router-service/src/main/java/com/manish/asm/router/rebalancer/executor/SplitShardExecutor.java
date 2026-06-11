@@ -26,7 +26,6 @@ public class SplitShardExecutor implements PlanExecutor {
     private final MigrationPlanner migrationPlanner;
     private final MigrationService migrationService;
     private final SplitOperationRegistry splitOperationRegistry;
-    private final MigrationTaskGenerator migrationTaskGenerator;
 
     @Override
     public boolean supports(RebalancePlan plan) {

@@ -25,6 +25,6 @@ public class OperationsController {
 
     @GetMapping("/{operationId}")
     public ResponseEntity<SplitOperation> getOperation(@PathVariable UUID operationId) {
-        return ResponseEntity.ok(splitOperationRegistry.find(operationId));
+        return ResponseEntity.ok(splitOperationRegistry.findById(operationId).get());
     }
 }

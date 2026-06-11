@@ -1,40 +1,47 @@
 package com.manish.asm.router.topology;
 
+import com.manish.asm.router.model.SplitOperationEntity;
+import com.manish.asm.router.repository.SplitOperationMapper;
+import com.manish.asm.router.repository.SplitOperationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@RequiredArgsConstructor
 public class SplitOperationRegistry {
-    private final ConcurrentHashMap<UUID, SplitOperation> operations = new ConcurrentHashMap<>();
+    private final SplitOperationRepository repository;
+    private final SplitOperationMapper mapper;
 
-    public void save(SplitOperation operation) {
-        operations.put(operation.operationId(), operation);
+    public SplitOperation save(SplitOperation operation) {
+        SplitOperationEntity entity = mapper.toEntity(operation);
+        SplitOperationEntity saved = repository.save(entity);
+
+        return mapper.toDomain(saved);
     }
 
-    public SplitOperation find(UUID operationId) {
-        return operations.get(operationId);
+    public Optional<SplitOperation> findById(UUID operationId) {
+        return repository.findById(operationId).map(mapper::toDomain);
     }
 
-    public Collection<SplitOperation> findAll() {
-        return operations.values();
+    public List<SplitOperation> findAll() {
+        return repository.findAll()
+                .stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 
     public void updateStatus(UUID operationId, SplitOperationStatus status) {
-
-        operations.computeIfPresent(operationId, (id, existing) -> new SplitOperation(
-            existing.operationId(),
-            existing.type(),
-            existing.sourceShard(),
-            existing.targetShards(),
-            status,
-            existing.createdAt()
-        ));
+        repository.findById(operationId).ifPresent(entity -> {
+            entity.setStatus(status);
+            repository.save(entity);
+        });
     }
 
-    public void remove(UUID operationId) {
-        operations.remove(operationId);
+    public void delete(UUID operationId) {
+        repository.deleteById(operationId);
     }
 }

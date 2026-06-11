@@ -9,6 +9,13 @@ spring:
     username: myusername
     password: mysecurepassword
     driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
 
 asm:
   hashing:
