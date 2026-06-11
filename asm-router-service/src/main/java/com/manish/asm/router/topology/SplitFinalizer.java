@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SplitFinalizer {
     private final ShardRepository shardRepository;
+    private final SplitOperationRegistry splitOperationRegistry;
 
     public void finalizeSplit(SplitOperation change) {
         Shard source = shardRepository
@@ -17,6 +18,10 @@ public class SplitFinalizer {
                         .orElseThrow();
 
         source.setStatus(ShardStatus.INACTIVE);
+        splitOperationRegistry.updateStatus(
+                change.operationId(),
+                SplitOperationStatus.COMPLETED
+        );
         shardRepository.save(source);
     }
 }
