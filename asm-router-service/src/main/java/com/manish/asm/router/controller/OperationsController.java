@@ -1,5 +1,7 @@
 package com.manish.asm.router.controller;
 
+import com.manish.asm.router.dto.operation.OperationDetailsResponse;
+import com.manish.asm.router.service.OperationQueryService;
 import com.manish.asm.router.topology.SplitOperation;
 import com.manish.asm.router.topology.SplitOperationRegistry;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OperationsController {
     private final SplitOperationRegistry splitOperationRegistry;
+    private final OperationQueryService operationQueryService;
 
     @GetMapping
     public List<SplitOperation> getAllOperations() {
@@ -24,7 +27,7 @@ public class OperationsController {
     }
 
     @GetMapping("/{operationId}")
-    public ResponseEntity<SplitOperation> getOperation(@PathVariable UUID operationId) {
-        return ResponseEntity.ok(splitOperationRegistry.findById(operationId).get());
+    public ResponseEntity<OperationDetailsResponse> getOperation(@PathVariable UUID operationId) {
+        return ResponseEntity.ok(operationQueryService.getOperation(operationId));
     }
 }

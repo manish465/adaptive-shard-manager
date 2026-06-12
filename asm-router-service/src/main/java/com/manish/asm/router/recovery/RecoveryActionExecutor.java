@@ -1,5 +1,6 @@
 package com.manish.asm.router.recovery;
 
+import com.manish.asm.router.topology.SplitLifecycleService;
 import com.manish.asm.router.topology.SplitOperation;
 import com.manish.asm.router.topology.SplitOperationRegistry;
 import com.manish.asm.router.topology.SplitOperationStatus;
@@ -12,11 +13,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class RecoveryActionExecutor {
     private final SplitOperationRegistry splitOperationRegistry;
+    private final SplitLifecycleService splitLifecycleService;
 
     public void execute(RecoveryAction action, SplitOperation operation) {
         switch (action) {
             case MARK_OPERATION_COMPLETED -> markCompleted(operation);
             case ALERT_OPERATOR -> alertOperator(operation);
+            case FINALIZE_SPLIT -> finalizeSplit(operation);
             case NO_ACTION -> log.debug("No recovery action required for operation {}", operation.operationId());
         }
     }
@@ -28,5 +31,11 @@ public class RecoveryActionExecutor {
 
     private void alertOperator(SplitOperation operation) {
         log.warn("Recovery requires manual investigation. operationId={}", operation.operationId());
+    }
+
+    private void finalizeSplit(SplitOperation operation) {
+        log.info("Attempting workflow recovery for operation {}", operation.operationId());
+        boolean finalized = splitLifecycleService.finalizeIfReady(operation.operationId());
+        log.info("Recovery finalization result operationId={} finalized={}", operation.operationId(), finalized);
     }
 }

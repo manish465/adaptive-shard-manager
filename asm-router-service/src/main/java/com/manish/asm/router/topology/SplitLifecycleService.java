@@ -22,8 +22,6 @@ public class SplitLifecycleService {
         if (changeOptional.isEmpty()) return false;
 
         finalizer.finalizeSplit(changeOptional.get());
-        registry.updateStatus(operationId, SplitOperationStatus.COMPLETED);
-
         return true;
     }
 }
